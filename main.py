@@ -1,7 +1,7 @@
 import numpy as np
 from pathlib import Path
 # Experiment ideas: 1. Regular 2. Looks at the next n words rather than just the next word 3. Same as 2 but weights words farther less
-experiment = 3
+experiment = 1
 
 class TrumpBot:
 
@@ -57,24 +57,25 @@ class TrumpBot:
     """ Generates a random speech given the matrix, ordered_tokens, and number of sentences wanted
     """
     def generate_random(mat, ordered_tokens, num_sentences):
-            curr_sentence = 0
-            speech_tokens = []
-            last_token = np.where(ordered_tokens == '.')[0][0]
-            while curr_sentence < num_sentences:
-                    row = mat[last_token]
-                    indices = np.where(row != 0)[0]
-                    values = [row[index] for index in indices]
-                    picked = np.random.choice(indices, p=values)
-                    last_token = picked
-                    speech_tokens.append(ordered_tokens[picked])
-                    if ordered_tokens[picked] == '.':
-                            curr_sentence += 1
-            speech = ''
-            for tok in speech_tokens:
-                    if tok not in [',', '.']:
-                            speech += ' '
-                    speech += tok
-            speech = speech[1:]
+        curr_sentence = 0
+        speech_tokens = []
+        last_token = np.where(ordered_tokens == '.')[0][0]
+        while curr_sentence < num_sentences:
+                row = mat[last_token]
+                indices = np.where(row != 0)[0]
+                values = [row[index] for index in indices]
+                picked = np.random.choice(indices, p=values)
+                last_token = picked
+                speech_tokens.append(ordered_tokens[picked])
+                if ordered_tokens[picked] == '.':
+                        curr_sentence += 1
+        speech = ''
+        for tok in speech_tokens:
+                if tok not in [',', '.']:
+                        speech += ' '
+                speech += tok
+        speech = speech[1:]
+        return speech
 
     def generate_speech():
         tokens = TrumpBot.return_token_array('speeches.txt')
@@ -86,7 +87,7 @@ class TrumpBot:
             elif experiment == 2 or experiment == 3:
                 mat, ordered_tokens = TrumpBot.make_transition_matrix_n(tokens, 3)
 
-        speech = generate_random(mat, ordered_tokens, 5)
+        speech = TrumpBot.generate_random(mat, ordered_tokens, 5)
         return speech
 
 
