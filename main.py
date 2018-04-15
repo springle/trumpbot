@@ -18,6 +18,8 @@ def return_token_array(text_file):
 	tokens = [token for token in tokens if token not in bad_set]
 	return tokens
 
+""" Takes in a list of tokens, and creates a transition matrix out of this
+"""
 def make_transition_matrix(tokens):
 	ordered_tokens = np.unique(tokens)
 	n = len(ordered_tokens)
@@ -31,6 +33,8 @@ def make_transition_matrix(tokens):
 	np.save('transition_matrix', mat)
 	return mat, ordered_tokens
 
+""" Generates a random speech given the matrix, ordered_tokens, and number of sentences wanted
+"""
 def generate_random(mat, ordered_tokens, num_sentences):
 	curr_sentence = 0
 	speech_tokens = []
@@ -60,7 +64,6 @@ if __name__ == '__main__':
 		mat, ordered_tokens = np.load('transition_matrix.npy'), np.load('ordered_tokens.npy')
 	else:
 		mat, ordered_tokens = make_transition_matrix(tokens)
-	# mat, ordered_tokens = make_transition_matrix(tokens)
 	speech = generate_random(mat, ordered_tokens, 5)
 	print(speech)
 
