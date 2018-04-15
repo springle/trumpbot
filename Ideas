@@ -1,0 +1,6 @@
+- Start with negative first character being period so we start with a sentence
+- Deal with quotes later
+- Create NxN matrix where N is number of unique words and punctuation, and normalize so all rows sum to 1
+
+Experiment idea:
+-Replace elipses with different punctuation (, . etc)
