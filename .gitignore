@@ -4,3 +4,6 @@ transition_matrix_2.npy
 ordered_tokens_2.npy
 transition_matrix_3.npy
 ordered_tokens_3.npy
+transition_matrix.npy
+ordered_tokens.npy
+__pycache__
