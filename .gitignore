@@ -1,2 +1,3 @@
 transition_matrix.npy
 ordered_tokens.npy
+__pycache__
