@@ -3,8 +3,9 @@ from main import TrumpBot
 application = Flask(__name__)
 
 # Trigger matrix generation
-print("Pre-generating matrix")
+print("Starting matrix generation")
 TrumpBot.generate_speech()
+print("Finished matrix generation")
 
 @application.route("/")
 def hello():
