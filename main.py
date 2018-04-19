@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 # Experiment ideas: 1. Regular 2. Looks at the next n words rather than just the next word 
 # 3. Same as 2 but weights words farther less 4. Allowing newline characters to see how natural paragraphs form.
-experiment = 4
+experiment = 1
 
 class TrumpBot:
 
@@ -113,7 +113,7 @@ class TrumpBot:
         if experiment == 4:
             speech = TrumpBot.generate_random_paragraphs(mat, ordered_tokens, 4)
         else:
-            speech = TrumpBot.generate_random(mat, ordered_tokens, 20)
+            speech = TrumpBot.generate_random(mat, ordered_tokens, 5)
         return speech
 
 
