@@ -1,6 +1,7 @@
 import numpy as np
 from pathlib import Path
-# Experiment ideas: 1. Regular 2. Looks at the next n words rather than just the next word 3. Same as 2 but weights words farther less
+# Experiment ideas: 1. Regular 2. Looks at the next n words rather than just the next word 
+# 3. Same as 2 but weights words farther less 4. Allowing newline characters to see how natural paragraphs form.
 experiment = 4
 
 class TrumpBot:
@@ -11,6 +12,8 @@ class TrumpBot:
     def return_token_array(text_file):
             f = open(text_file, 'r')
             bad_set = [" ", "", "\n", "\ufeff\n"]
+            if experiment == 4:
+                bad_set.remove("\n")
             tokens = []
             line = f.readline()
             while line:
@@ -77,17 +80,40 @@ class TrumpBot:
         speech = speech[1:]
         return speech
 
+    def generate_random_paragraphs(mat, ordered_tokens, num_paragraphs):
+        curr_paragraph = 0
+        speech_tokens = []
+        last_token = np.where(ordered_tokens == '.')[0][0]
+        while curr_paragraph < num_paragraphs:
+                row = mat[last_token]
+                indices = np.where(row != 0)[0]
+                values = [row[index] for index in indices]
+                picked = np.random.choice(indices, p=values)
+                speech_tokens.append(ordered_tokens[picked])
+                if ordered_tokens[picked] == "\n" and last_token != 0 and len(speech_tokens) > 1:
+                    curr_paragraph += 1
+                last_token = picked
+        speech = ''
+        for tok in speech_tokens:
+                if tok not in [',', '.', ';', ':', '\n']:
+                        speech += ' '
+                speech += tok
+        speech = speech[1:]
+        return speech
+
     def generate_speech():
         tokens = TrumpBot.return_token_array('speeches.txt')
         if Path('transition_matrix_{}.npy'.format(experiment)).exists() and Path('ordered_tokens_{}.npy'.format(experiment)).exists():
-            print('here')
             mat, ordered_tokens = np.load('transition_matrix_{}.npy'.format(experiment)), np.load('ordered_tokens_{}.npy'.format(experiment))
         else:
             if experiment == 1 or experiment == 4:
                 mat, ordered_tokens = TrumpBot.make_transition_matrix(tokens)
             elif experiment == 2 or experiment == 3:
                 mat, ordered_tokens = TrumpBot.make_transition_matrix_n(tokens, 3)
-        speech = TrumpBot.generate_random(mat, ordered_tokens, 250)
+        if experiment == 4:
+            speech = TrumpBot.generate_random_paragraphs(mat, ordered_tokens, 4)
+        else:
+            speech = TrumpBot.generate_random(mat, ordered_tokens, 20)
         return speech
 
 
